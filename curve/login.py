@@ -1,22 +1,22 @@
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import Page
 
-def login(base_url: str, username: str, password: str):
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
-        page.goto(base_url)
-        print(page.title())
 
-        # Fill in username and password
-        page.fill("#username", username)
-        page.fill("#mat-input-1", password)
+def login(page: Page, base_url: str, username: str, password: str):
+    page.goto(base_url)
+    print(page.title())
 
-        # Submit the form (find and click login button)
-        page.click("button[type='submit']")
+    # Fill in username and password. formcontrolname is used instead of the
+    # auto-generated #mat-input-N ids, which shift if the page's field order
+    # changes.
+    page.fill("#username", username)
+    page.fill("[formcontrolname='password']", password)
 
-        # Wait for navigation to complete
-        page.wait_for_load_state("networkidle")
-        print("Login successful")
-        print(f"Current URL: {page.url}")
+    # Submit the form (find and click login button)
+    page.click("button[type='submit']")
 
-        browser.close()
+    # Wait for navigation to complete
+    page.wait_for_load_state("networkidle")
+
+    print("Login successful")
+    print(f"Current URL: {page.url}")
+

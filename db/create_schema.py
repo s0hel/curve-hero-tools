@@ -27,9 +27,18 @@ def create_schema():
             )
             """
         )
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS appointments (
+                id VARCHAR(64) PRIMARY KEY,
+                data JSON NOT NULL
+            )
+            """
+        )
+
         connection.commit()
         cursor.close()
-        print("patients table is ready")
+        print("tables are ready")
     finally:
         connection.close()
 

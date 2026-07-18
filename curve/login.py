@@ -1,10 +1,10 @@
 from playwright.sync_api import sync_playwright
 
-def login(username: str, password: str):
+def login(base_url: str, username: str, password: str):
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page()
-        page.goto("https://zpdentistry.curvehero.com")
+        page.goto(base_url)
         print(page.title())
 
         # Fill in username and password
